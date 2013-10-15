@@ -28,6 +28,8 @@ and sampling rate at 25000 Hz:
 ![decimated](doc/decsignal.png)
 ![decimated2](doc/zoomdecsignal.png)
 
+![diff1](doc/diff1.png)
+
 
 
 Needed libraries:
