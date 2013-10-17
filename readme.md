@@ -1,6 +1,6 @@
 Decimation:
 ----------
-This library implements a polyphase FIR decimation filter. The decimation class is used to decimate the input signal by a factor of two.
+This library implements a polyphase FIR decimation filter [wikipedia](http://en.wikipedia.org/wiki/Multi-rate_digital_signal_processing#Polyphase_Decomposition). The decimation class is used to decimate the input signal by a factor of two.
 
 Low-pass filter:
 ---------------
@@ -28,7 +28,24 @@ and sampling rate at 25000 Hz:
 ![decimated](doc/decsignal.png)
 ![decimated2](doc/zoomdecsignal.png)
 
-![diff1](doc/diff1.png)
+
+In four test cases the output of the code is compared with Matlab's decimate function:
+
+1. 20 Hz cosine with amplitude of 100 + 12000 Hz cosine with amplitude of 10
+
+![diff1](doc/case1.png)
+
+2. 20 Hz cosine with amplitude of 100 + 6250 Hz cosine with amplitude of 10
+
+![diff2](doc/case2.png)
+
+3. 20 Hz cosine with amplitude of 100 + 3000 Hz cosine with amplitude of 10
+
+![diff3](doc/case3.png)
+
+4. 20 Hz cosine with amplitude of 100 + 1000 Hz cosine with amplitude of 10
+
+![diff4](doc/case4.png)
 
 
 

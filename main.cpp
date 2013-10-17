@@ -48,7 +48,9 @@ int main()
             samples[ch] = (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_hifrq) * signal_hiamp
                          + (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_lofrq) * signal_loamp;
 
-            signalFile<<samples[ch]<<",";
+            signalFile<<samples[ch];
+            if ((ch+1)<numberOfChannels)
+                signalFile<<",";
         }
 
         signalFile<<endl;
@@ -61,8 +63,11 @@ int main()
 
             // write decimatedSamples into file
             decSignalFile<<float(i)/float(sampling_frq)<<","; // time
-            for (size_t ch=0; ch<numberOfChannels; ch++)
-                decSignalFile<<decimatedSamples[ch]<<","; // channels in columns
+            for (size_t ch=0; ch<numberOfChannels; ch++) {
+                decSignalFile<<decimatedSamples[ch]; // channels in columns
+                if ((ch+1)<numberOfChannels)
+                    decSignalFile<<",";
+            }
             decSignalFile<<endl;
         }
     }
@@ -91,7 +96,9 @@ int main()
             samples[ch] = (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_hifrq) * signal_hiamp
                          + (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_lofrq) * signal_loamp;
 
-            signalFile<<samples[ch]<<",";
+            signalFile<<samples[ch];
+            if ((ch+1)<numberOfChannels)
+                signalFile<<",";
         }
 
         signalFile<<endl;
@@ -104,8 +111,11 @@ int main()
 
             // write decimatedSamples into file
             decSignalFile<<float(i)/float(sampling_frq)<<","; // time
-            for (size_t ch=0; ch<numberOfChannels; ch++)
-                decSignalFile<<decimatedSamples[ch]<<","; // channels in columns
+            for (size_t ch=0; ch<numberOfChannels; ch++) {
+                decSignalFile<<decimatedSamples[ch]; // channels in columns
+                if ((ch+1)<numberOfChannels)
+                    decSignalFile<<",";
+            }
             decSignalFile<<endl;
         }
     }
@@ -134,7 +144,9 @@ int main()
             samples[ch] = (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_hifrq) * signal_hiamp
                          + (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_lofrq) * signal_loamp;
 
-            signalFile<<samples[ch]<<",";
+            signalFile<<samples[ch];
+            if ((ch+1)<numberOfChannels)
+                signalFile<<",";
         }
 
         signalFile<<endl;
@@ -147,8 +159,11 @@ int main()
 
             // write decimatedSamples into file
             decSignalFile<<float(i)/float(sampling_frq)<<","; // time
-            for (size_t ch=0; ch<numberOfChannels; ch++)
-                decSignalFile<<decimatedSamples[ch]<<","; // channels in columns
+            for (size_t ch=0; ch<numberOfChannels; ch++){
+                decSignalFile<<decimatedSamples[ch]; // channels in columns
+                if ((ch+1)<numberOfChannels)
+                    decSignalFile<<",";
+            }
             decSignalFile<<endl;
         }
     }
@@ -177,7 +192,9 @@ int main()
             samples[ch] = (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_hifrq) * signal_hiamp
                          + (*funcp)(2.0*M_PI * float(i)/float(sampling_frq) * signal_lofrq) * signal_loamp;
 
-            signalFile<<samples[ch]<<",";
+            signalFile<<samples[ch];
+            if ((ch+1)<numberOfChannels)
+                signalFile<<",";
         }
 
         signalFile<<endl;
@@ -190,8 +207,11 @@ int main()
 
             // write decimatedSamples into file
             decSignalFile<<float(i)/float(sampling_frq)<<","; // time
-            for (size_t ch=0; ch<numberOfChannels; ch++)
-                decSignalFile<<decimatedSamples[ch]<<","; // channels in columns
+            for (size_t ch=0; ch<numberOfChannels; ch++) {
+                decSignalFile<<decimatedSamples[ch]; // channels in columns
+                if ((ch+1)<numberOfChannels)
+                    decSignalFile<<",";
+            }
             decSignalFile<<endl;
         }
     }
