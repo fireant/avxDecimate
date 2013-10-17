@@ -69,6 +69,8 @@ changed to:
 
     line 93: b = fir1(nfilt,0.43);
 
+to have the desired impulse response (see the second figure from the top).
+
 Needed libraries:
 ------
 1. Boost::Circular_buffer
