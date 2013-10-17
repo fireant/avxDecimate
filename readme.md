@@ -48,6 +48,17 @@ In four test cases the output of the code is compared with Matlab's decimate fun
 ![diff4](doc/case4.png)
 
 
+Matlab code to plot the above figures:
+--------------------------------------
+    >> signal = csvread('signal4.csv');
+    >> decsignal = csvread('decimated_signal4.csv');
+    >> d = moddecimate(signal(2:end,2),2,47,'fir');
+    >> plot(t, decsignal(:,2), '-.', t, d(12:end-12), ':r', t, decsignal(:,2)-d(12:end-12),'k', 'linewidth', 2);
+    >> legend('avxDecimate', 'matlab', 'avxDecimate-matlab');
+    >> xlabel('time (seconds)');
+    >> ylabel('amplitude');
+    >> title('20 Hz cosine + 1000 Hz cosine')
+
 
 Needed libraries:
 ------
