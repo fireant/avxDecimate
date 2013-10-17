@@ -62,9 +62,11 @@ Matlab code to plot the above figures:
 moddecimate is a copy of the decimate function with only one change:
 
 original:
+
     line 93: b = fir1(nfilt,1/r);
 
 changed to:
+
     line 93: b = fir1(nfilt,0.43);
 
 Needed libraries:
