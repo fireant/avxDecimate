@@ -4,7 +4,7 @@
 
 using namespace std;
 
-const float Decimate::subfilter1[HALF_FILTER_SIZE] = {0.000351300968081,
+const float Decimate::subfilterEven[HALF_FILTER_SIZE] = {0.000351300968081,
                                                      -0.000993492892699,
                                                       0.002204029354477,
                                                      -0.003996538310521,
@@ -29,7 +29,7 @@ const float Decimate::subfilter1[HALF_FILTER_SIZE] = {0.000351300968081,
                                                       0.000994006674784,
                                                      -0.001015370812141};
 
-const float Decimate::subfilter2[HALF_FILTER_SIZE] = {-0.001015370812141,
+const float Decimate::subfilterOdd[HALF_FILTER_SIZE] = {-0.001015370812141,
                                                        0.000994006674784,
                                                       -0.000434310459263,
                                                       -0.001516632751836,
@@ -57,43 +57,43 @@ const float Decimate::subfilter2[HALF_FILTER_SIZE] = {-0.001015370812141,
 
 Decimate::Decimate(size_t numberOfChannels)
 {
-    currentSub = true;
+    currentSubEven = true;
 
-    samplesSub1.reserve(numberOfChannels);
-    samplesSub2.reserve(numberOfChannels);
+    samplesSubEven.reserve(numberOfChannels);
+    samplesSubOdd.reserve(numberOfChannels);
 
     for (size_t i=0; i<numberOfChannels; i++) {
-        samplesSub1[i].set_capacity(HALF_FILTER_SIZE);
-        samplesSub2[i].set_capacity(HALF_FILTER_SIZE);
+        samplesSubEven[i].set_capacity(HALF_FILTER_SIZE);
+        samplesSubOdd[i].set_capacity(HALF_FILTER_SIZE);
     }
 
-    avxFilter11 = _mm256_load_ps(&(subfilter1[0]));
-    avxFilter12 = _mm256_load_ps(&(subfilter1[8]));
-    avxFilter13 = _mm256_load_ps(&(subfilter1[16]));
-    avxFilter21 = _mm256_load_ps(&(subfilter2[0]));
-    avxFilter22 = _mm256_load_ps(&(subfilter2[8]));
-    avxFilter23 = _mm256_load_ps(&(subfilter2[16]));
+    avxFilterEven1 = _mm256_load_ps(&(subfilterEven[0]));
+    avxFilterEven2 = _mm256_load_ps(&(subfilterEven[8]));
+    avxFilterEven3 = _mm256_load_ps(&(subfilterEven[16]));
+    avxFilterOdd1 = _mm256_load_ps(&(subfilterOdd[0]));
+    avxFilterOdd2 = _mm256_load_ps(&(subfilterOdd[8]));
+    avxFilterOdd3 = _mm256_load_ps(&(subfilterOdd[16]));
 }
 
 bool Decimate::AddSample(std::vector<float>& samples) {
-    if (currentSub) {
+    if (currentSubEven) {
         for (size_t i=0; i<samples.size(); i++)
-            samplesSub1[i].push_back(samples[i]);
-        currentSub = false;
+            samplesSubEven[i].push_back(samples[i]);
+        currentSubEven = false;
         return false;
     } else {
         for (size_t i=0; i<samples.size(); i++)
-            samplesSub2[i].push_back(samples[i]);
-        currentSub = true;
+            samplesSubOdd[i].push_back(samples[i]);
+        currentSubEven = true;
     }
 
-    return (samplesSub2[0].size() == samplesSub2[0].capacity());
+    return (samplesSubOdd[0].size() == samplesSubOdd[0].capacity());
 }
 
 void Decimate::GetDecSample(std::vector<float> &samples) {
     for (size_t i=0; i<samples.size(); i++) {
         // first subfilter
-        float *data = samplesSub1[i].linearize();
+        float *data = samplesSubEven[i].linearize();
         __m256 avxData1 = _mm256_load_ps(data);
         __m256 avxData2 = _mm256_load_ps(&(data[8]));
         __m256 avxData3 = _mm256_load_ps(&(data[16]));
@@ -102,10 +102,10 @@ void Decimate::GetDecSample(std::vector<float> &samples) {
         __m256 avxResult2;
         __m256 avxResult3;
 
-        avxResult1 = _mm256_mul_ps(avxFilter11, avxData1);
-        avxResult2 = _mm256_mul_ps(avxFilter12, avxData2);
+        avxResult1 = _mm256_mul_ps(avxFilterEven1, avxData1);
+        avxResult2 = _mm256_mul_ps(avxFilterEven2, avxData2);
         avxResult3 = _mm256_add_ps(avxResult1, avxResult2);
-        avxResult2 = _mm256_mul_ps(avxFilter13, avxData3);
+        avxResult2 = _mm256_mul_ps(avxFilterEven3, avxData3);
         avxResult1 = _mm256_add_ps(avxResult2, avxResult3);
 
         __m128 hiQuad = _mm256_extractf128_ps(avxResult1, 1);
@@ -127,15 +127,15 @@ void Decimate::GetDecSample(std::vector<float> &samples) {
         //cout<<"Elapsed nanosecs: "<<ns.count()<<endl;
 
         // second subfilter
-        data = samplesSub2[i].linearize();
+        data = samplesSubOdd[i].linearize();
         avxData1 = _mm256_load_ps(data);
         avxData2 = _mm256_load_ps(&(data[8]));
         avxData3 = _mm256_load_ps(&(data[16]));
 
-        avxResult1 = _mm256_mul_ps(avxFilter21, avxData1);
-        avxResult2 = _mm256_mul_ps(avxFilter22, avxData2);
+        avxResult1 = _mm256_mul_ps(avxFilterOdd1, avxData1);
+        avxResult2 = _mm256_mul_ps(avxFilterOdd2, avxData2);
         avxResult3 = _mm256_add_ps(avxResult1, avxResult2);
-        avxResult2 = _mm256_mul_ps(avxFilter23, avxData3);
+        avxResult2 = _mm256_mul_ps(avxFilterOdd3, avxData3);
         avxResult1 = _mm256_add_ps(avxResult2, avxResult3);
 
         hiQuad = _mm256_extractf128_ps(avxResult1, 1);

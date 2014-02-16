@@ -15,20 +15,20 @@ public:
     void GetDecSample(std::vector<float>& samples);
 
 private:
-    bool currentSub = true;
+    bool currentSubEven = true;
 
-    std::vector<boost::circular_buffer<float> > samplesSub1;
-    std::vector<boost::circular_buffer<float> > samplesSub2;
+    std::vector<boost::circular_buffer<float> > samplesSubEven;
+    std::vector<boost::circular_buffer<float> > samplesSubOdd;
 
-    static const float subfilter1[HALF_FILTER_SIZE];
-    static const float subfilter2[HALF_FILTER_SIZE];
+    static const float subfilterEven[HALF_FILTER_SIZE];
+    static const float subfilterOdd[HALF_FILTER_SIZE];
 
-    __m256 avxFilter11;
-    __m256 avxFilter12;
-    __m256 avxFilter13;
-    __m256 avxFilter21;
-    __m256 avxFilter22;
-    __m256 avxFilter23;
+    __m256 avxFilterEven1;
+    __m256 avxFilterEven2;
+    __m256 avxFilterEven3;
+    __m256 avxFilterOdd1;
+    __m256 avxFilterOdd2;
+    __m256 avxFilterOdd3;
 
 };
 
